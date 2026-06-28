@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 
-class VirtualBackSystem : public BankService {
+class VirtualBankSystem : public BankService {
   public:
     /* ------------------ for demo ---------------- */
     void addCard(const std::string& card, const std::string& pin, const std::vector<std::string>& accounts) {
@@ -72,7 +72,7 @@ class VirtualCashSystem : public CashBin {
 };
 
 int main() {
-  VirtualBackSystem bank_service;
+  VirtualBankSystem bank_service;
   VirtualCashSystem cash_bin;
 
   // Make test case for demo
