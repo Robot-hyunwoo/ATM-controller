@@ -3,8 +3,17 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <stdio.h>
 
 int main() {
+  ATMController atm;
+
+  atm.insertCard();
+  atm.enterPin();
+  atm.getAccounts();
+  atm.selectAccount();
+  atm.deposit();
+  atm.withdraw();
+  atm.ejectCard();
+
   return 0;
 }
