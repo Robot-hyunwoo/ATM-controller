@@ -94,7 +94,10 @@ make test
   3) Withdraw 150 dollars
   
 # test run
-- case 1 : 
-- case 2 :
+- case 1 : Account insufficient funds case.
+- case 2 : Wrong pin number case.
+- case 3 : Wrong account seleceted case.
+- case 4 : Minus dollars input case.
+- case 5 : Cash bin insufficient funds case.
 
 ```
