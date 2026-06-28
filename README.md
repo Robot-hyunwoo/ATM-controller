@@ -51,12 +51,20 @@ $ git clone https://github.com/Robot-hyunwoo/ATM-controller.git
 
 ### Build
 ```bash
+# demo build
+make
 
+# test build
+make test
 ```
 
 ### Run
 ```bash
+# demo run
+./atm_demo.o
 
+# test run
+./atm_test.o
 ```
 
 ### Test Case
