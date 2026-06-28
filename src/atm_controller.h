@@ -27,8 +27,8 @@ class ATMController {
 
     // Back function set-up
     int getBalance() const;
-    void deposit(int dollars);
-    void withdraw(int dollars);
+    void deposit(int dollars) const;
+    void withdraw(int dollars) const;
 
     // State
     ATMState state() const;

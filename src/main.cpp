@@ -33,12 +33,25 @@ int main() {
   ATMController atm(bank_service, cash_bin);
 
   atm.insertCard("123456");
+  std::cout << "[1] Card is inserted." << std::endl;
+
   atm.enterPin("1234");
+  std::cout << "[2] PIN number is accepted." << std::endl;
+
   atm.getAccounts();
+  std::cout << "[3] Check account in this card..." << std::endl;
+
   atm.selectAccount("card_1");
+  std::cout << "[4] Account is selected." << std::endl;
+
   atm.deposit(120);
+  std::cout << "[5] Deposited." << std::endl;
+
   atm.withdraw(50);
+  std::cout << "[6] Withdraw." << std::endl;
+
   atm.ejectCard();
+  std::cout << "[7] Take your card." << std::endl;
 
   return 0;
 }

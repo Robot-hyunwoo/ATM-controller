@@ -70,7 +70,11 @@ void ATMController::selectAccount(const std::string& account_id) {
 }
 
 void ATMController::ejectCard() {
+  std::cout << "Finish bank process. Please take Your card." << std::endl;
 
+  current_account_.clear();
+  current_card_number_.clear();
+  state_ = ATMState::IDLE;
 }
 
 int ATMController::getBalance() const {
@@ -81,7 +85,7 @@ int ATMController::getBalance() const {
   return bank_service_.getBalance(current_card_number_);
 }
 
-void ATMController::deposit(int dollars) {
+void ATMController::deposit(const int dollars) const {
   if (state_ != ATMState::FUNCTION_WAITED) {
     throw std::runtime_error("Please select the account to deposit.");
   }
@@ -97,7 +101,7 @@ void ATMController::deposit(int dollars) {
   bank_service_.deposit(current_account_, dollars);
 }
 
-void ATMController::withdraw(int dollars) {
+void ATMController::withdraw(const int dollars) const {
   if (state_ != ATMState::FUNCTION_WAITED) {
     throw std::runtime_error("Please select the account to withdraw.");
   }
@@ -115,6 +119,8 @@ void ATMController::withdraw(int dollars) {
   if (!cash_bin_.checkCash(dollars)) {
     throw std::runtime_error("ATM has insufficient cash.");
   }
+
+  std::cout << "Withdraw " << dollars << " will be extracted from " << current_account_ << std::endl;
 
   // Cash extract and update account
   bank_service_.withdraw(current_account_, dollars);
