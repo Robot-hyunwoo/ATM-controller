@@ -23,11 +23,11 @@ class VirtualBackSystem : public BankService {
 
     bool validatePinNumber(const std::string& current_card_number,
                           const std::string& pin_number) override {
-      std::map<std::string, std::string>::iterator iter = card_pin_.find(current_card_number);
+      const auto iter = card_pin_.find(current_card_number);
       return (iter != card_pin_.end() && iter->second == pin_number);
     }
     std::vector<std::string> getAccountsDB(const std::string& current_card_number) override {
-      std::map<std::string, std::vector<std::string>>::iterator iter = card_accounts_.find(current_card_number);
+      const auto iter = card_accounts_.find(current_card_number);
 
       std::vector<std::string> accounts;
       if (iter != card_accounts_.end()) {accounts = iter->second;}
@@ -36,10 +36,10 @@ class VirtualBackSystem : public BankService {
     int getBalance(const std::string &current_account) override {
       return account_balance_[current_account];
     };
-    void deposit(const std::string &current_account, int dollars) override {
+    void deposit(const std::string &current_account, const int dollars) override {
       account_balance_[current_account] += dollars;
     };
-    void withdraw(const std::string &current_account, int dollars) override {
+    void withdraw(const std::string &current_account, const int dollars) override {
       account_balance_[current_account] -= dollars;
     };
 
