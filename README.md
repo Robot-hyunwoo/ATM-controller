@@ -78,5 +78,23 @@ make test
 
 ### Test Case
 ```bash
+# demo run
+- card_1 : 12345678 (pin : 0000)
+  - account_1 : 100 balance
+  - account_2 : 500 balance
+
+- card_2 : 01020304 (pin : 1234)
+  - account_3 : 120 balance
+
+- cash bin : 500 dollars
+
+- scenario
+  1) Check account, pin number, balance of card_1 / account_1 
+  2) Deposit 100 dollars
+  3) Withdraw 150 dollars
+  
+# test run
+- case 1 : 
+- case 2 :
 
 ```
