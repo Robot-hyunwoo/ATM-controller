@@ -116,7 +116,7 @@ void ATMController::withdraw(const int dollars) const {
   }
 
   // Check cash bin
-  if (!cash_bin_.checkCash(dollars)) {
+  if (cash_bin_.checkCash() - dollars < 0) {
     throw std::runtime_error("ATM has insufficient cash.");
   }
 

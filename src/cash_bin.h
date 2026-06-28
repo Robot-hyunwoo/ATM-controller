@@ -13,7 +13,7 @@ class CashBin {
   public:
   virtual ~CashBin() = default;
 
-  virtual bool checkCash(int dollars) = 0;
+  virtual int checkCash() = 0;
   virtual void insertCash(int dollars) = 0;
   virtual void extractCash(int dollars) = 0;
 };
