@@ -1,6 +1,7 @@
 #ifndef CASH_BIN_H
 #define CASH_BIN_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -10,7 +11,11 @@
 
 class CashBin {
   public:
-    virtual void dummyCash(int dollars) = 0;
+  virtual ~CashBin() = default;
+
+  virtual bool checkCash(int dollars) = 0;
+  virtual void insertCash(int dollars) = 0;
+  virtual void extractCash(int dollars) = 0;
 };
 
 #endif

@@ -1,9 +1,10 @@
 #include "atm_controller.h"
+
+#include <iostream>
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <iostream>
 #include <stdexcept>
-#include <algorithm>
 
 ATMController::ATMController(BankService& bank_service, CashBin& cash_bin)
   : bank_service_(bank_service), cash_bin_(cash_bin), state_(ATMState::IDLE) {}
@@ -72,14 +73,50 @@ void ATMController::ejectCard() {
 
 }
 
-void ATMController::getBalance() {
+int ATMController::getBalance() const {
+  if (state_ != ATMState::FUNCTION_WAITED) {
+    throw std::runtime_error("Please select the account to check balance.");
+  }
 
+  return bank_service_.getBalance(current_card_number_);
 }
 
-void ATMController::deposit() {
+void ATMController::deposit(int dollars) {
+  if (state_ != ATMState::FUNCTION_WAITED) {
+    throw std::runtime_error("Please select the account to deposit.");
+  }
 
+  if (dollars <= 0) {
+    throw std::runtime_error("Dollars must be greater than 0.");
+  }
+
+  std::cout << "Deposit " << dollars << " will be inserted in " << current_account_ << std::endl;
+
+  // Cash insert and update account
+  cash_bin_.insertCash(dollars);
+  bank_service_.deposit(current_account_, dollars);
 }
 
-void ATMController::withdraw() {
+void ATMController::withdraw(int dollars) {
+  if (state_ != ATMState::FUNCTION_WAITED) {
+    throw std::runtime_error("Please select the account to withdraw.");
+  }
 
+  if (dollars <= 0) {
+    throw std::runtime_error("Dollars must be greater than 0.");
+  }
+
+  // Check balance
+  if (bank_service_.getBalance(current_account_) < dollars) {
+    throw std::runtime_error("Insufficient balance.");
+  }
+
+  // Check cash bin
+  if (!cash_bin_.checkCash(dollars)) {
+    throw std::runtime_error("ATM has insufficient cash.");
+  }
+
+  // Cash extract and update account
+  bank_service_.withdraw(current_account_, dollars);
+  cash_bin_.extractCash(dollars);
 }
