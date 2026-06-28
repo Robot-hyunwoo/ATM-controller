@@ -15,14 +15,12 @@ ATMState ATMController::state() const {
 
 void ATMController::insertCard(const std::string& card_number) {
   if (state_ != ATMState::IDLE) {
-    throw std::runtime_error("ATM controller is not already.");
+    throw std::runtime_error("    (!) ATM controller is not already.");
   }
 
   if (card_number.empty()) {
-    throw std::runtime_error("Card number must not be empty.");
+    throw std::runtime_error("    (!) Card number must not be empty.");
   }
-
-  std::cout << "Card is inserted." << std::endl;
 
   current_card_number_ = card_number;
   state_ = ATMState::PIN_WAITED;
@@ -30,15 +28,15 @@ void ATMController::insertCard(const std::string& card_number) {
 
 void ATMController::enterPin(const std::string& pin_number) {
   if (state_ != ATMState::PIN_WAITED) {
-    throw std::runtime_error("Please insert your card.");
+    throw std::runtime_error("    (!) Please insert your card.");
   }
 
   // Bank service and Cash bin is virtual
   if (!bank_service_.validatePinNumber(current_card_number_, pin_number)) {
-    throw std::runtime_error("Incorrect PIN number.");
+    throw std::runtime_error("    (!) Incorrect PIN number.");
   }
 
-  std::cout << "PIN number is entered." << std::endl;
+  std::cout << "  - PIN number is entered." << std::endl;
 
   state_ = ATMState::ACCOUNT_WAITED;
 }
@@ -51,7 +49,7 @@ std::vector<std::string> ATMController::getAccounts() {
 
 void ATMController::selectAccount(const std::string& account_id) {
   if (state_ != ATMState::ACCOUNT_WAITED) {
-    throw std::runtime_error("Cannot be load your account.");
+    throw std::runtime_error("    (!) Cannot be load your account.");
   }
 
   // load account by getAccounts and compare with selected account
@@ -59,10 +57,10 @@ void ATMController::selectAccount(const std::string& account_id) {
 
   // Not found
   if (std::find(accountsDB.begin(), accountsDB.end(), account_id) == accountsDB.end()) {
-    throw std::runtime_error("Selected account is not belong to this card.");
+    throw std::runtime_error("    (!) Selected account is not belong to this card.");
   }
 
-  std::cout << "Find your account from card : " << current_card_number_ << std::endl;
+  std::cout << "  - Find your account from card : " << current_card_number_ << std::endl;
 
   // Save the founded account id
   current_account_ = account_id;
@@ -70,7 +68,7 @@ void ATMController::selectAccount(const std::string& account_id) {
 }
 
 void ATMController::ejectCard() {
-  std::cout << "Finish bank process. Please take Your card." << std::endl;
+  std::cout << "  - Finish bank process. Please take Your card." << std::endl;
 
   current_account_.clear();
   current_card_number_.clear();
@@ -79,7 +77,7 @@ void ATMController::ejectCard() {
 
 int ATMController::getBalance() const {
   if (state_ != ATMState::FUNCTION_WAITED) {
-    throw std::runtime_error("Please select the account to check balance.");
+    throw std::runtime_error("    (!) Please select the account to check balance.");
   }
 
   return bank_service_.getBalance(current_card_number_);
@@ -87,42 +85,48 @@ int ATMController::getBalance() const {
 
 void ATMController::deposit(const int dollars) const {
   if (state_ != ATMState::FUNCTION_WAITED) {
-    throw std::runtime_error("Please select the account to deposit.");
+    throw std::runtime_error("    (!) Please select the account to deposit.");
   }
 
   if (dollars <= 0) {
-    throw std::runtime_error("Dollars must be greater than 0.");
+    throw std::runtime_error("    (!) Dollars must be greater than 0.");
   }
 
-  std::cout << "Deposit " << dollars << " will be inserted in " << current_account_ << std::endl;
+  std::cout << "  - Deposit " << dollars << " will be inserted in " << current_account_ << std::endl;
 
   // Cash insert and update account
   cash_bin_.insertCash(dollars);
+  std::cout << "  - Cash Bin : " << cash_bin_.checkCash() << std::endl;
+
   bank_service_.deposit(current_account_, dollars);
+  std::cout << "  - Account Balance : " << bank_service_.getBalance(current_account_) << std::endl;
 }
 
 void ATMController::withdraw(const int dollars) const {
   if (state_ != ATMState::FUNCTION_WAITED) {
-    throw std::runtime_error("Please select the account to withdraw.");
+    throw std::runtime_error("    (!) Please select the account to withdraw.");
   }
 
   if (dollars <= 0) {
-    throw std::runtime_error("Dollars must be greater than 0.");
+    throw std::runtime_error("    (!) Dollars must be greater than 0.");
   }
 
   // Check balance
   if (bank_service_.getBalance(current_account_) < dollars) {
-    throw std::runtime_error("Insufficient balance.");
+    throw std::runtime_error("    (!) Insufficient balance.");
   }
 
   // Check cash bin
   if (cash_bin_.checkCash() - dollars < 0) {
-    throw std::runtime_error("ATM has insufficient cash.");
+    throw std::runtime_error("    (!) ATM has insufficient cash.");
   }
 
-  std::cout << "Withdraw " << dollars << " will be extracted from " << current_account_ << std::endl;
+  std::cout << "  - Withdraw " << dollars << " will be extracted from " << current_account_ << std::endl;
 
   // Cash extract and update account
-  bank_service_.withdraw(current_account_, dollars);
   cash_bin_.extractCash(dollars);
+  std::cout << "  - Cash Bin : " << cash_bin_.checkCash() << std::endl;
+
+  bank_service_.withdraw(current_account_, dollars);
+  std::cout << "  - Account Balance : " << bank_service_.getBalance(current_account_) << std::endl;
 }

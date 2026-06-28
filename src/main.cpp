@@ -14,7 +14,6 @@ class VirtualBackSystem : public BankService {
       card_pin_[card] = pin;
       card_accounts_[card] = accounts;
     }
-
     void setBalance(const std::string& account, const int& balance) {
       account_balance_[account] = balance;
     }
@@ -88,26 +87,30 @@ int main() {
 
   ATMController atm(bank_service, cash_bin);
 
-  atm.insertCard("12345678");
-  std::cout << "[1] Card is inserted." << std::endl;
+  try {
+    atm.insertCard("12345678");
+    std::cout << "[1] Card is inserted." << std::endl;
 
-  atm.enterPin("0000");
-  std::cout << "[2] PIN number is accepted." << std::endl;
+    atm.enterPin("0000");
+    std::cout << "[2] PIN number is accepted." << std::endl;
 
-  atm.getAccounts();
-  std::cout << "[3] Check account in this card..." << std::endl;
+    atm.getAccounts();
+    std::cout << "[3] Check account in this card..." << std::endl;
 
-  atm.selectAccount("account_1");
-  std::cout << "[4] Account is selected." << std::endl;
+    atm.selectAccount("account_1");
+    std::cout << "[4] Account is selected." << std::endl;
 
-  atm.deposit(80);
-  std::cout << "[5] Deposited." << std::endl;
+    atm.deposit(100);
+    std::cout << "[5] Deposited." << std::endl;
 
-  atm.withdraw(150);
-  std::cout << "[6] Withdraw." << std::endl;
+    atm.withdraw(150);
+    std::cout << "[6] Withdraw." << std::endl;
 
-  atm.ejectCard();
-  std::cout << "[7] Take your card." << std::endl;
+    atm.ejectCard();
+    std::cout << "[7] Take your card." << std::endl;
+  } catch (std::exception& e) {
+    std::cout << e.what() << std::endl;
+  }
 
   std::cout << " === Bank System Demo Finished === " << std::endl;
   return 0;
