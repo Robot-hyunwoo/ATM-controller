@@ -10,6 +10,10 @@ class VirtualBackSystem : public BankService {
   public:
     bool validatePinNumber(const std::string& current_card_number,
                             const std::string& pin_number) override { return true; } // for test
+    std::vector<std::string> getAccountsDB(const std::string& current_card_number) override {
+      std::vector<std::string> accounts;
+      return accounts;
+    }
 };
 
 class VirtualCashSystem : public CashBin {
@@ -26,7 +30,7 @@ int main() {
   atm.insertCard("123456");
   atm.enterPin("1234");
   atm.getAccounts();
-  atm.selectAccount();
+  atm.selectAccount("card_1");
   atm.deposit();
   atm.withdraw();
   atm.ejectCard();

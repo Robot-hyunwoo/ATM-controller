@@ -22,7 +22,7 @@ class ATMController {
     void insertCard(const std::string& card_number);
     void enterPin(const std::string& pin_number);
     std::vector<std::string> getAccounts();
-    void selectAccount();
+    void selectAccount(const std::string& account_id);
     void ejectCard();
 
     // Back function set-up
