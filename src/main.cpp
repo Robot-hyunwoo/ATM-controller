@@ -27,12 +27,21 @@ class VirtualBackSystem : public BankService {
       return (iter != card_pin_.end() && iter->second == pin_number);
     }
     std::vector<std::string> getAccountsDB(const std::string& current_card_number) override {
+      std::map<std::string, std::vector<std::string>>::iterator iter = card_accounts_.find(current_card_number);
+
       std::vector<std::string> accounts;
+      if (iter != card_accounts_.end()) {accounts = iter->second;}
       return accounts;
     }
-    int getBalance(const std::string &current_account) override { return 0; };
-    void deposit(const std::string &current_account, int dollars) override { }; // for test
-    void withdraw(const std::string &current_account, int dollars) override { }; // for test
+    int getBalance(const std::string &current_account) override {
+      return account_balance_[current_account];
+    };
+    void deposit(const std::string &current_account, int dollars) override {
+      account_balance_[current_account] += dollars;
+    };
+    void withdraw(const std::string &current_account, int dollars) override {
+      account_balance_[current_account] -= dollars;
+    };
 
   private:
     /* ------------------ for demo ---------------- */
@@ -48,9 +57,19 @@ class VirtualBackSystem : public BankService {
 
 class VirtualCashSystem : public CashBin {
   public:
-    int checkCash() override { return 0; /* check cash in bin */ }
-    void insertCash(int dollars) override { /* insert cash to bin */ }
-    void extractCash(int dollars) override { /* extract cash from bin */ }
+    int checkCash() override {
+      return cash_in_bin_;
+    }
+    void insertCash(const int dollars) override {
+      cash_in_bin_ += dollars;
+    }
+    void extractCash(const int dollars) override {
+      cash_in_bin_ -= dollars;
+    }
+  private:
+    /* ------------------ for demo ---------------- */
+    int cash_in_bin_ = 0;
+    /* -------------------------------------------- */
 };
 
 int main() {
