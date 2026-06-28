@@ -32,11 +32,20 @@ You can simplify some complex real world problems if you think it's not worth il
 
 2. Layout
 
-    ```bash
-    ATM-controller.
-    ├── LICENSE
-    └── README.md
-    ```
+   ```bash
+   ATM-controller.
+   ├── LICENSE
+   ├── Makefile
+   ├── README.md
+   ├── atm_demo.o
+   └── src
+    ├── atm_controller.cpp
+    ├── atm_controller.h
+    ├── bank_service.h
+    ├── cash_bin.h
+    ├── main.cpp
+    └── test_atm.cpp
+   ```
 
 3. Requirements
    
